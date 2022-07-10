@@ -1,6 +1,9 @@
 export const SEARCH_TEXT = 'Russia-Ukraine+war'; // 搜索的文本
 export const PAGE = 10; // 多少页
 
+export const DIRECTORY = 'dist'; // 目录名称
+export const FILENAME = 'TheNewYork'; // 文件名称
+
 export const DOMAIN = 'https://www.nytimes.com';
 export const URI = `${DOMAIN}/search?query=${SEARCH_TEXT}`;
 export const URL = 'https://samizdat-graphql.nytimes.com/graphql/v2';

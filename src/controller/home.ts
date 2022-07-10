@@ -2,7 +2,7 @@ import { Controller, Get } from '@midwayjs/decorator';
 import { appendFileSync } from 'fs';
 import { forEach } from 'lodash';
 
-import { CURSOR, DOMAIN, NEWLINE, PAGE, SEARCH_TEXT, URI } from '../constants';
+import { CURSOR, DIRECTORY, DOMAIN, FILENAME, NEWLINE, PAGE, SEARCH_TEXT, URI } from '../constants';
 import { http, promiseify } from '../utils/util';
 
 @Controller('/')
@@ -18,7 +18,7 @@ export class HomeController {
       const result = await promiseify(item.node.node.url);
       // const title = result.$('title').text();
       const text = result.$('section p').text();
-      appendFileSync('dist/TheNewYork.txt', `${text}${NEWLINE}`);
+      appendFileSync(`${DIRECTORY}/${FILENAME}.txt`, `${text}${NEWLINE}`);
       return Promise.resolve();
     });
   };
@@ -38,7 +38,7 @@ export class HomeController {
     await this.first();
     let page = PAGE;
     let cursor = CURSOR;
-    while (page > 0) {
+    while (page > 1) {
       page -= 1;
       const data = await this.getCycleList(cursor);
       cursor = data.endCursor;
@@ -56,7 +56,7 @@ export class HomeController {
       const href = $(item).attr('href');
       const result = await promiseify(`${DOMAIN}${href}`);
       const text = result.$('section p').text();
-      appendFileSync('dist/TheNewYork.txt', `${text}/${NEWLINE}`);
+      appendFileSync(`${DIRECTORY}/${FILENAME}.txt`, `${text}/${NEWLINE}`);
     });
 
     return Promise.resolve();
