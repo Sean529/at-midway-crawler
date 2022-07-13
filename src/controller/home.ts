@@ -1,8 +1,17 @@
 import { Controller, Get } from '@midwayjs/decorator';
-import { appendFileSync } from 'fs';
+import { appendFileSync, existsSync, mkdirSync, unlinkSync } from 'fs';
 import { forEach } from 'lodash';
 
-import { CURSOR, DIRECTORY, DOMAIN, FILENAME, NEWLINE, PAGE, SEARCH_TEXT, URI } from '../constants';
+import {
+  CURSOR,
+  DIRECTORY,
+  DOMAIN,
+  FILENAME,
+  NEWLINE,
+  PAGE,
+  SEARCH_TEXT,
+  URI,
+} from '../constants';
 import { http, promiseify } from '../utils/util';
 
 @Controller('/')
@@ -35,6 +44,19 @@ export class HomeController {
 
   @Get('/')
   async index() {
+    if (existsSync(`${DIRECTORY}/${FILENAME}.txt`)) {
+      console.log(
+        '%c AT 🥝 DIRECTORY 🥝-48',
+        'font-size:13px; background:#de4307; color:#f6d04d;',
+        DIRECTORY
+      );
+      // 存在则删除
+      unlinkSync(`${DIRECTORY}/${FILENAME}.txt`);
+    }
+    if (!existsSync(`${DIRECTORY}`)) {
+      // 不存在目录则创建
+      mkdirSync(`${DIRECTORY}`);
+    }
     await this.first();
     let page = PAGE;
     let cursor = CURSOR;
