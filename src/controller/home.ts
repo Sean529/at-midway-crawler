@@ -25,9 +25,12 @@ export class HomeController {
   getEdges = async edges => {
     forEach(edges, async item => {
       const result = await promiseify(item.node.node.url);
-      // const title = result.$('title').text();
+      const title = result.$('h1').text();
       const text = result.$('section p').text();
-      appendFileSync(`${DIRECTORY}/${FILENAME}.txt`, `${text}${NEWLINE}`);
+      appendFileSync(
+        `${DIRECTORY}/${FILENAME}.txt`,
+        `《${title}》${NEWLINE}${text}${NEWLINE}${NEWLINE}`
+      );
       return Promise.resolve();
     });
   };
@@ -74,11 +77,15 @@ export class HomeController {
     const res = await promiseify(URI);
     const { $ } = res;
     const tagA = $('ol > li a');
-    tagA.each(async (i, item) => {
+    tagA.each(async item => {
       const href = $(item).attr('href');
       const result = await promiseify(`${DOMAIN}${href}`);
+      const title = result.$('h1').text();
       const text = result.$('section p').text();
-      appendFileSync(`${DIRECTORY}/${FILENAME}.txt`, `${text}/${NEWLINE}`);
+      appendFileSync(
+        `${DIRECTORY}/${FILENAME}.txt`,
+        `《${title}》${NEWLINE}${text}${NEWLINE}${NEWLINE}`
+      );
     });
 
     return Promise.resolve();
